@@ -3,8 +3,8 @@
         <div class="digicells-form-row">
             <div class="digicells-form-group">
                 <label for="destination">Destination City Code</label>
-                <input type="text" id="destination" name="destination" placeholder="PAR, NYC, LON, DXB" required maxlength="3">
-                <small>Enter 1-3 letter city/airport code (e.g., PAR for Paris)</small>
+                <input type="text" id="destination" name="destination" placeholder="PAR, NYC, LON, DXB" required maxlength="3" style="text-transform: uppercase;">
+                <small>Enter 1-3 letter city code (e.g., PAR for Paris)</small>
             </div>
             
             <div class="digicells-form-group">
@@ -22,41 +22,46 @@
             <div class="digicells-form-group">
                 <label for="rooms">Rooms</label>
                 <select id="rooms" name="rooms">
-                    <?php for ($i = 1; $i <= 5; $i++): ?>
-                        <option value="<?php echo $i; ?>"><?php echo $i; ?> Room<?php echo $i > 1 ? 's' : ''; ?></option>
-                    <?php endfor; ?>
+                    <option value="1">1 Room</option>
+                    <option value="2">2 Rooms</option>
+                    <option value="3">3 Rooms</option>
+                    <option value="4">4 Rooms</option>
+                    <option value="5">5 Rooms</option>
                 </select>
             </div>
             
             <div class="digicells-form-group">
-                <label for="adults">Adults (18+)</label>
+                <label for="adults">Adults</label>
                 <select id="adults" name="adults">
-                    <?php for ($i = 1; $i <= 8; $i++): ?>
-                        <option value="<?php echo $i; ?>"><?php echo $i; ?> Adult<?php echo $i > 1 ? 's' : ''; ?></option>
-                    <?php endfor; ?>
+                    <option value="1">1 Adult</option>
+                    <option value="2">2 Adults</option>
+                    <option value="3">3 Adults</option>
+                    <option value="4">4 Adults</option>
+                    <option value="5">5 Adults</option>
+                    <option value="6">6 Adults</option>
                 </select>
             </div>
             
             <div class="digicells-form-group">
-                <label for="children">Children (2-12 years)</label>
+                <label for="children">Children</label>
                 <select id="children" name="children">
-                    <option value="0">No children</option>
-                    <?php for ($i = 1; $i <= 4; $i++): ?>
-                        <option value="<?php echo $i; ?>"><?php echo $i; ?> Child<?php echo $i > 1 ? 'ren' : ''; ?></option>
-                    <?php endfor; ?>
+                    <option value="0">0 Children</option>
+                    <option value="1">1 Child</option>
+                    <option value="2">2 Children</option>
+                    <option value="3">3 Children</option>
+                    <option value="4">4 Children</option>
                 </select>
-                <small>Children under 2 stay free</small>
             </div>
             
             <div class="digicells-form-group digicells-search-button-group">
-                <button type="submit" class="digicells-search-button">Search Hotels</button>
+                <button type="submit" class="digicells-search-button">🔍 Search Hotels</button>
             </div>
         </div>
     </form>
     
     <div id="digicells-search-loader" class="digicells-loader" style="display: none;">
         <div class="spinner"></div>
-        <p>Searching hotels...</p>
+        <p>Searching hotels across ' + destination + '...</p>
     </div>
     
     <div id="digicells-search-results"></div>
