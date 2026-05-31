@@ -3,8 +3,8 @@
         <div class="digicells-form-row">
             <div class="digicells-form-group">
                 <label for="destination">Destination City Code</label>
-                <input type="text" id="destination" name="destination" placeholder="e.g., PAR, NYC, DXB, LON" required>
-                <small>Enter airport/city code (e.g., PAR for Paris)</small>
+                <input type="text" id="destination" name="destination" placeholder="PAR, NYC, LON, DXB" required maxlength="3">
+                <small>Enter 1-3 letter city/airport code (e.g., PAR for Paris)</small>
             </div>
             
             <div class="digicells-form-group">
@@ -29,21 +29,23 @@
             </div>
             
             <div class="digicells-form-group">
-                <label for="adults">Adults</label>
+                <label for="adults">Adults (18+)</label>
                 <select id="adults" name="adults">
-                    <?php for ($i = 1; $i <= 10; $i++): ?>
+                    <?php for ($i = 1; $i <= 8; $i++): ?>
                         <option value="<?php echo $i; ?>"><?php echo $i; ?> Adult<?php echo $i > 1 ? 's' : ''; ?></option>
                     <?php endfor; ?>
                 </select>
             </div>
             
             <div class="digicells-form-group">
-                <label for="children">Children</label>
+                <label for="children">Children (2-12 years)</label>
                 <select id="children" name="children">
-                    <?php for ($i = 0; $i <= 5; $i++): ?>
-                        <option value="<?php echo $i; ?>"><?php echo $i; ?> Child<?php echo $i != 1 ? 'ren' : ''; ?></option>
+                    <option value="0">No children</option>
+                    <?php for ($i = 1; $i <= 4; $i++): ?>
+                        <option value="<?php echo $i; ?>"><?php echo $i; ?> Child<?php echo $i > 1 ? 'ren' : ''; ?></option>
                     <?php endfor; ?>
                 </select>
+                <small>Children under 2 stay free</small>
             </div>
             
             <div class="digicells-form-group digicells-search-button-group">
