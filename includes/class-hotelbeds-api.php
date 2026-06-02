@@ -6,29 +6,17 @@ class Hotelbeds_API {
     private $environment;
     private $base_url;
     
-    public function __construct() {
-        $this->api_key = get_option('digicells_hotelbeds_api_key', '');
-        $this->secret = get_option('digicells_hotelbeds_secret', '');
-        $this->environment = get_option('digicells_hotelbeds_environment', 'test');
-        
-        $this->base_url = ($this->environment === 'live') 
-            ? 'https://api.hotelbeds.com/hotel-api/1.0' 
-            : 'https://api.test.hotelbeds.com/hotel-api/1.0';
-    }
+public function __construct() {
+    $this->api_key = trim(get_option('digicells_hotelbeds_api_key', ''));
+    $this->secret = trim(get_option('digicells_hotelbeds_secret', ''));
+    $this->environment = get_option('digicells_hotelbeds_environment', 'test');
     
-    /**
-     * Generate X-Signature for API authentication
-     */
-    private function generate_signature() {
-        $timestamp = time();
-        $signature_string = $this->api_key . $this->secret . $timestamp;
-        $signature = hash('sha256', $signature_string);
-        
-        return array(
-            'timestamp' => $timestamp,
-            'signature' => $signature
-        );
-    }
+    // FORCE TEST ENVIRONMENT since Live is not allowed with these credentials
+    $this->base_url = 'https://api.test.hotelbeds.com/hotel-api/1.0';
+    
+    // Remove the conditional that checks for 'live'
+    // This ensures you ALWAYS use the test endpoint
+}
     
     /**
      * Get API headers for authentication

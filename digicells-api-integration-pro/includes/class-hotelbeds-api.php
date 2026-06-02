@@ -122,6 +122,69 @@ public function search_hotels($params) {
         
         return json_decode(wp_remote_retrieve_body($response), true);
     }
+    /**
+ * Direct search method - accepts pre-formatted payload
+ */
+public function search_hotels_direct($payload) {
+    if (empty($this->api_key) || empty($this->secret)) {
+        error_log('Hotelbeds API: Missing credentials');
+        return new WP_Error('api_error', 'API credentials not configured');
+    }
+    
+    // Check cache
+    $cache_key = 'digicells_hotel_search_' . md5(json_encode($payload));
+    $cached_result = get_transient($cache_key);
+    if ($cached_result !== false) {
+        error_log('Hotelbeds API: Returning cached result');
+        return $cached_result;
+    }
+    
+    $sig_data = $this->generate_signature();
+    
+    $url = $this->base_url . '/hotels';
+    
+    error_log('Hotelbeds API: Calling URL: ' . $url);
+    error_log('Hotelbeds API: Payload: ' . json_encode($payload));
+    
+    $response = wp_remote_post($url, array(
+        'headers' => array(
+            'Api-Key' => $this->api_key,
+            'X-Signature' => $sig_data['signature'],
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ),
+        'body' => json_encode($payload),
+        'timeout' => 30,
+        'sslverify' => false  // Only for testing
+    ));
+    
+    if (is_wp_error($response)) {
+        error_log('Hotelbeds API: WP Error - ' . $response->get_error_message());
+        return $response;
+    }
+    
+    $status_code = wp_remote_retrieve_response_code($response);
+    $body = wp_remote_retrieve_body($response);
+    
+    error_log('Hotelbeds API: Response Code: ' . $status_code);
+    error_log('Hotelbeds API: Response Body: ' . substr($body, 0, 500));
+    
+    if ($status_code !== 200) {
+        $error_msg = 'API returned status ' . $status_code;
+        $body_data = json_decode($body, true);
+        if (isset($body_data['error']['message'])) {
+            $error_msg = $body_data['error']['message'];
+        }
+        return new WP_Error('api_error', $error_msg);
+    }
+    
+    $body_data = json_decode($body, true);
+    
+    // Cache for 1 hour
+    set_transient($cache_key, $body_data, 3600);
+    
+    return $body_data;
+}
     
     /**
      * Check API status
